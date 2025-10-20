@@ -41,48 +41,11 @@ const APP_NAME = ("TURBOPACK compile-time value", "First project") || 'Prostore'
 const APP_DESCRIPTION = ("TURBOPACK compile-time value", "First project is a modern e-commerce platform for selling digital products") || 'A modern store built with Next.js';
 const SERVER_URL = ("TURBOPACK compile-time value", "http://localhost:3000") || 'http://localhost:3000';
 }),
-"[project]/app/layout.tsx [app-rsc] (ecmascript)", ((__turbopack_context__) => {
-"use strict";
+"[project]/app/layout.tsx [app-rsc] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-__turbopack_context__.s([
-    "default",
-    ()=>RootLayout,
-    "metadata",
-    ()=>metadata
-]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js [app-rsc] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$inter_5972bc34$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[next]/internal/font/google/inter_5972bc34.js [app-rsc] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/constants/index.js [app-rsc] (ecmascript)");
-;
-;
-;
-;
-const metadata = {
-    title: {
-        template: `%s | ${__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["APP_NAME"]}`,
-        default: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["APP_NAME"]
-    },
-    description: __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["APP_DESCRIPTION"],
-    metadataBase: new URL(__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["SERVER_URL"])
-};
-function RootLayout({ children }) {
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
-        lang: "en",
-        suppressHydrationWarning: true,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("body", {
-            className: `${__TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$inter_5972bc34$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"].className}`,
-            children: children
-        }, void 0, false, {
-            fileName: "[project]/app/layout.tsx",
-            lineNumber: 24,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/app/layout.tsx",
-        lineNumber: 23,
-        columnNumber: 5
-    }, this);
-}
+const e = new Error("Could not parse module '[project]/app/layout.tsx'\n\nExpected ',', got '}'");
+e.code = 'MODULE_UNPARSABLE';
+throw e;
 }),
 "[project]/node_modules/next/dist/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js [app-rsc] (ecmascript)", ((__turbopack_context__, module, exports) => {
 "use strict";
