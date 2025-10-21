@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
+    {"offset": {"line": 27, "column": 0}, "map": {"version":3,"sources":["file:///Users/nhungbui/Desktop/first-project/app/%28root%29/page.tsx"],"sourcesContent":["import { Button } from '@/components/ui/button';\n\nconst delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));\n\nconst HomePage = async () => {\n  await delay(2000);\n  return <Button>Button</Button>;\n};\n\nexport default HomePage;\n"],"names":[],"mappings":";;;;;AAAA;;;AAEA,MAAM,QAAQ,CAAC,KAAe,IAAI,QAAc,CAAC,UAAY,WAAW,SAAS;AAEjF,MAAM,WAAW;IACf,MAAM,MAAM;IACZ,qBAAO,8OAAC,qIAAM;kBAAC;;;;;;AACjB;uCAEe","debugId":null}}]
+}
