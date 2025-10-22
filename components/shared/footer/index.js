@@ -1,12 +1,10 @@
 import { APP_NAME } from '@/lib/constants';
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
+const Footer = ({ year }) => {
   return (
     <footer className="border-t">
       <div className="p-5 flex-center">
-        {currentYear} {APP_NAME}. All Rights reserved.
+        {year} {APP_NAME}. All Rights reserved.
       </div>
     </footer>
   );
