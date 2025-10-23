@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constants';
-import Menu from './menu';
+import AuthSection from './auth-section';
 
 const Header = () => {
   return (
@@ -19,7 +19,9 @@ const Header = () => {
             <span className="hidden lg:block font-bold text-2xl ml-3">{APP_NAME}</span>
           </Link>
         </div>
-        <Menu />
+        <div className="flex items-center gap-4">
+          <AuthSection />
+        </div>
       </div>
     </header>
   );
