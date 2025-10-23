@@ -1,4 +1,21 @@
+import { hashSync } from 'bcrypt-ts-edge'; // Import the hashSync function from the bcrypt-ts-edge library
+
 export const sampleData = {
+  users: [
+    {
+      name: 'John',
+      email: 'admin@example.com',
+      password: hashSync('123456', 10),
+      role: 'ADMIN',
+    },
+    {
+      name: 'Jane',
+      email: 'jane@example.com',
+      password: hashSync('123456', 10),
+      role: 'USER',
+    },
+  ],
+
   products: [
     {
       name: "iPhone 15 Pro",
