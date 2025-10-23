@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/nhungbui/Desktop/first-project/app/%28root%29/layout.tsx"],"sourcesContent":["export default function RootLayout({\n      children,\n    }: Readonly<{\n      children: React.ReactNode;\n    }>) {\n      return (\n        <div className='flex h-screen flex-col'>\n          <main className='flex-1 wrapper'>{children}</main>\n        </div>\n      );\n    }"],"names":[],"mappings":";;;;;;AAAe,SAAS,WAAW,EAC7B,QAAQ,EAGR;IACA,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;YAAK,WAAU;sBAAkB;;;;;;;;;;;AAGxC","debugId":null}}]
-}
