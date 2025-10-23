@@ -19,6 +19,9 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/OneDrive_Desktop_first-project_a0ff3932._.js",
     "static/chunks/turbopack-OneDrive_Desktop_first-project_31592c4e._.js"
   ],
+  "polyfillFiles": [],
+  "lowPriorityFiles": [],
+  "rootMainFiles": [],
   "ampFirstPages": []
 };
 globalThis.__BUILD_MANIFEST.lowPriorityFiles = [
