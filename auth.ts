@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { compareSync } from 'bcrypt-ts-edge';
 import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
@@ -99,3 +100,17 @@ export const config = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
 
+=======
+import { NextResponse, type NextRequest } from 'next/server';
+
+export function auth(request: NextRequest) {
+  // Ensure a stable session cart id cookie exists
+  if (!request.cookies.get('sessionCartId')) {
+    const sessionCartId = crypto.randomUUID();
+    const response = NextResponse.next();
+    response.cookies.set('sessionCartId', sessionCartId);
+    return response;
+  }
+  return NextResponse.next();
+}
+>>>>>>> 32e185f (setup add to cart)

@@ -1,19 +1,25 @@
-import { PrismaClient } from '../lib/generated/prisma';
+import { neonConfig } from '@neondatabase/serverless';
+import { PrismaNeon } from '@prisma/adapter-neon';
+import { PrismaClient } from '@/lib/generated/prisma';
+import ws from 'ws';
 
-// Extends PrismaClient with custom transformations
-export const prisma = new PrismaClient().$extends({
-  result: {
-    product: {
-      price: {
-        compute(product) {
-          return product.price.toString();
+neonConfig.webSocketConstructor = ws;
+const connectionString = `${process.env.DATABASE_URL}`;
+const adapter = new PrismaNeon({ connectionString });
+
+export const prisma = new PrismaClient({ adapter }).$extends({
+      result: {
+        product: {
+          price: {
+            compute(product: { price: { toString(): string } }) {
+              return product.price.toString();
+            },
+          },
+          rating: {
+            compute(product: { rating: { toString(): string } }) {
+              return product.rating.toString();
+            },
+          },
         },
       },
-      rating: {
-        compute(product) {
-          return product.rating.toString();
-        },
-      },
-    },
-  },
-});
+    });
