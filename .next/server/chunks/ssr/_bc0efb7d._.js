@@ -7,12 +7,29 @@ __turbopack_context__.s([
     ()=>APP_DESCRIPTION,
     "APP_NAME",
     ()=>APP_NAME,
+    "LATEST_PRODUCTS_LIMIT",
+    ()=>LATEST_PRODUCTS_LIMIT,
     "SERVER_URL",
-    ()=>SERVER_URL
+    ()=>SERVER_URL,
+    "signInDefaultValues",
+    ()=>signInDefaultValues,
+    "signUpDefaultValues",
+    ()=>signUpDefaultValues
 ]);
 const APP_NAME = ("TURBOPACK compile-time value", "First project") || 'Prostore';
 const APP_DESCRIPTION = ("TURBOPACK compile-time value", "First project is a modern e-commerce platform for selling digital products") || 'A modern store built with Next.js';
 const SERVER_URL = ("TURBOPACK compile-time value", "http://localhost:3000") || 'http://localhost:3000';
+const LATEST_PRODUCTS_LIMIT = Number(process.env.LATEST_PRODUCTS_LIMIT) || 4;
+const signInDefaultValues = {
+    email: '',
+    password: ''
+};
+const signUpDefaultValues = {
+    name: 'Steve Smith',
+    email: 'steve@example.com',
+    password: 'password',
+    confirmPassword: 'password'
+};
 }),
 "[project]/lib/utils.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";

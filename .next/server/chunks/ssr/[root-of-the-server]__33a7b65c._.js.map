@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 3, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"","debugId":null}},
-    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["file:///Users/nhungbui/Desktop/first-project/app/%28root%29/page.tsx"],"sourcesContent":["import { Button } from '@/components/ui/button';\n\n\nconst HomePage = () => {\n  return <Button>Button</Button>;\n};\n\nexport default HomePage;"],"names":[],"mappings":";;;;;AAAA;;;AAGA,MAAM,WAAW;IACf,qBAAO,8OAAC,qIAAM;kBAAC;;;;;;AACjB;uCAEe","debugId":null}}]
-}

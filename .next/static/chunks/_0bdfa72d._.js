@@ -7,13 +7,30 @@ __turbopack_context__.s([
     ()=>APP_DESCRIPTION,
     "APP_NAME",
     ()=>APP_NAME,
+    "LATEST_PRODUCTS_LIMIT",
+    ()=>LATEST_PRODUCTS_LIMIT,
     "SERVER_URL",
-    ()=>SERVER_URL
+    ()=>SERVER_URL,
+    "signInDefaultValues",
+    ()=>signInDefaultValues,
+    "signUpDefaultValues",
+    ()=>signUpDefaultValues
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 const APP_NAME = ("TURBOPACK compile-time value", "First project") || 'Prostore';
 const APP_DESCRIPTION = ("TURBOPACK compile-time value", "First project is a modern e-commerce platform for selling digital products") || 'A modern store built with Next.js';
 const SERVER_URL = ("TURBOPACK compile-time value", "http://localhost:3000") || 'http://localhost:3000';
+const LATEST_PRODUCTS_LIMIT = Number(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.LATEST_PRODUCTS_LIMIT) || 4;
+const signInDefaultValues = {
+    email: '',
+    password: ''
+};
+const signUpDefaultValues = {
+    name: 'Steve Smith',
+    email: 'steve@example.com',
+    password: 'password',
+    confirmPassword: 'password'
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
