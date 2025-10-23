@@ -1,5 +1,5 @@
-<<<<<<< HEAD
 import { compareSync } from 'bcrypt-ts-edge';
+import { NextResponse } from 'next/server';
 import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -56,6 +56,15 @@ export const config = {
     }),
   ],
   callbacks: {
+    authorized({ request }: any) {
+      if (!request.cookies.get('sessionCartId')) {
+        const sessionCartId = crypto.randomUUID();
+        const response = NextResponse.next();
+        response.cookies.set('sessionCartId', sessionCartId);
+        return response;
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }: any) {
       // Assign user fields to token
       if (user) {
@@ -100,17 +109,3 @@ export const config = {
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
 
-=======
-import { NextResponse, type NextRequest } from 'next/server';
-
-export function auth(request: NextRequest) {
-  // Ensure a stable session cart id cookie exists
-  if (!request.cookies.get('sessionCartId')) {
-    const sessionCartId = crypto.randomUUID();
-    const response = NextResponse.next();
-    response.cookies.set('sessionCartId', sessionCartId);
-    return response;
-  }
-  return NextResponse.next();
-}
->>>>>>> 32e185f (setup add to cart)
