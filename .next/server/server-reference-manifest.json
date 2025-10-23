@@ -1,5 +1,66 @@
 {
-  "node": {},
+  "node": {
+    "007e1a91ef88e5bc6ba102f399a1ca0b32e2da77e3": {
+      "workers": {
+        "app/(root)/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(root)/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/OneDrive/Desktop/first-project/lib/actions/product.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signOutUser",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(root)/page": "action-browser"
+      },
+      "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts",
+      "exportedName": "signOutUser"
+    },
+    "00ab43f4709def5ab8b6debd595c2b4959d4b1b94f": {
+      "workers": {
+        "app/(root)/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(root)/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/OneDrive/Desktop/first-project/lib/actions/product.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getLatestProducts",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/product.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(root)/page": "rsc"
+      },
+      "filename": "OneDrive/Desktop/first-project/lib/actions/product.actions.ts",
+      "exportedName": "getLatestProducts"
+    },
+    "60d56f0ab630cb89fdf1f6be75e54c4dacd76f47c7": {
+      "workers": {
+        "app/(auth)/sign-in/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(auth)/sign-in/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signInWithCredentials",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/page": "action-browser"
+      },
+      "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts",
+      "exportedName": "signInWithCredentials"
+    },
+    "60bb03ee294f901ce7d6bbd5efe659947726e71a94": {
+      "workers": {
+        "app/(auth)/sign-up/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(auth)/sign-up/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signUp",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-up/page": "action-browser"
+      },
+      "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts",
+      "exportedName": "signUp"
+    }
+  },
   "edge": {},
   "encryptionKey": "8qXGRiQS4k3pshdjKliMAtu6FZhXcg4GJdvzu/QhSSc="
 }
