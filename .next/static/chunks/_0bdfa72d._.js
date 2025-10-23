@@ -7,13 +7,30 @@ __turbopack_context__.s([
     ()=>APP_DESCRIPTION,
     "APP_NAME",
     ()=>APP_NAME,
+    "LATEST_PRODUCTS_LIMIT",
+    ()=>LATEST_PRODUCTS_LIMIT,
     "SERVER_URL",
-    ()=>SERVER_URL
+    ()=>SERVER_URL,
+    "signInDefaultValues",
+    ()=>signInDefaultValues,
+    "signUpDefaultValues",
+    ()=>signUpDefaultValues
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 const APP_NAME = ("TURBOPACK compile-time value", "First project") || 'Prostore';
 const APP_DESCRIPTION = ("TURBOPACK compile-time value", "First project is a modern e-commerce platform for selling digital products") || 'A modern store built with Next.js';
 const SERVER_URL = ("TURBOPACK compile-time value", "http://localhost:3000") || 'http://localhost:3000';
+const LATEST_PRODUCTS_LIMIT = Number(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.LATEST_PRODUCTS_LIMIT) || 4;
+const signInDefaultValues = {
+    email: '',
+    password: ''
+};
+const signUpDefaultValues = {
+    name: 'Steve Smith',
+    email: 'steve@example.com',
+    password: 'password',
+    confirmPassword: 'password'
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -23,7 +40,13 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 __turbopack_context__.s([
     "cn",
-    ()=>cn
+    ()=>cn,
+    "convertToPlainObject",
+    ()=>convertToPlainObject,
+    "formatError",
+    ()=>formatError,
+    "round2",
+    ()=>round2
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/clsx/dist/clsx.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/tailwind-merge/dist/bundle-mjs.mjs [app-client] (ecmascript)");
@@ -34,6 +57,36 @@ function cn() {
         inputs[_key] = arguments[_key];
     }
     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$tailwind$2d$merge$2f$dist$2f$bundle$2d$mjs$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["twMerge"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clsx"])(inputs));
+}
+const round2 = (value)=>{
+    if (typeof value === 'number') {
+        return Math.round((value + Number.EPSILON) * 100) / 100; // avoid rounding errors
+    } else if (typeof value === 'string') {
+        return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+    } else {
+        throw new Error('value is not a number nor a string');
+    }
+};
+function formatError(error) {
+    if (error.name === 'ZodError') {
+        // Handle Zod error
+        const fieldErrors = Object.keys(error.errors).map((field)=>{
+            const message = error.errors[field].message;
+            return typeof message === 'string' ? message : JSON.stringify(message);
+        });
+        return fieldErrors.join('. ');
+    } else if (error.name === 'PrismaClientKnownRequestError' && error.code === 'P2002') {
+        var _error_meta;
+        // Handle Prisma error
+        const field = ((_error_meta = error.meta) === null || _error_meta === void 0 ? void 0 : _error_meta.target) ? error.meta.target[0] : 'Field';
+        return "".concat(field.charAt(0).toUpperCase() + field.slice(1), " already exists");
+    } else {
+        // Handle other errors
+        return typeof error.message === 'string' ? error.message : JSON.stringify(error.message);
+    }
+}
+function convertToPlainObject(value) {
+    return JSON.parse(JSON.stringify(value));
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/nhungbui/Desktop/first-project/app/loading.tsx"],"sourcesContent":["const Loading = () => {\n  return (\n    <div className=\"flex h-screen w-screen items-center justify-center\">\n      <span\n        className=\"h-12 w-12 animate-spin rounded-full border-4 border-gray-300 border-t-transparent\"\n        aria-label=\"Loading\"\n      />\n    </div>\n  );\n};\n\nexport default Loading;\n"],"names":[],"mappings":";;;;;;AAAA,MAAM,UAAU;IACd,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;YACC,WAAU;YACV,cAAW;;;;;;;;;;;AAInB;uCAEe","debugId":null}}]
-}
