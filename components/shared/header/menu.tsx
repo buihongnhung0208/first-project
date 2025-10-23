@@ -16,10 +16,15 @@ const Menu = () => {
               Cart
             </Link>
           </Button>
-          <Button asChild>
+          <Button asChild variant='outline'>
             <Link href='/sign-in'>
               <UserIcon />
               Sign In
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href='/sign-up'>
+              Sign Up
             </Link>
           </Button>
         </nav>
@@ -37,10 +42,15 @@ const Menu = () => {
                   Cart
                 </Link>
               </Button>
-               <Button asChild>
+              <Button asChild variant='outline'>
                 <Link href='/sign-in'>
                   <UserIcon />
                   Sign In
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href='/sign-up'>
+                  Sign Up
                 </Link>
               </Button>
             </SheetContent>

@@ -1,0 +1,29 @@
+{
+  "pages": {
+    "/(auth)/sign-in/page": [
+      "static/chunks/a3162_next_dist_b9504ed0._.js",
+      "static/chunks/OneDrive_Desktop_first-project_app_favicon_ico_mjs_e4baaab3._.js",
+      "static/chunks/[root-of-the-server]__8df5d955._.css",
+      "static/chunks/a3162_next-themes_dist_index_mjs_483e068c._.js",
+      "static/chunks/OneDrive_Desktop_first-project_app_layout_tsx_49ea6789._.js",
+      "static/chunks/a3162_next_dist_41f8d2dc._.js",
+      "static/chunks/OneDrive_Desktop_first-project_app_loading_tsx_77caa3ee._.js",
+      "static/chunks/a3162_c7c83ff6._.js",
+      "static/chunks/OneDrive_Desktop_first-project_748e60dc._.js",
+      "static/chunks/OneDrive_Desktop_first-project_app_not-found_tsx_77caa3ee._.js",
+      "static/chunks/a3162_next_dist_client_components_builtin_global-error_77caa3ee.js",
+      "static/chunks/a3162_3a7e4090._.js",
+      "static/chunks/OneDrive_Desktop_first-project_34ad11df._.js",
+      "static/chunks/OneDrive_Desktop_first-project_app_(auth)_sign-in_page_tsx_77caa3ee._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_88ed4bfa._.js",
+      "static/chunks/a3162_next_dist_compiled_react-dom_1a5032c7._.js",
+      "static/chunks/a3162_next_dist_compiled_next-devtools_index_9df7ced3.js",
+      "static/chunks/a3162_next_dist_compiled_ab049009._.js",
+      "static/chunks/a3162_next_dist_client_ae8ddef9._.js",
+      "static/chunks/a3162_next_dist_bd9d5e8b._.js",
+      "static/chunks/a3162_@swc_helpers_cjs_959b7577._.js",
+      "static/chunks/OneDrive_Desktop_first-project_a0ff3932._.js",
+      "static/chunks/turbopack-OneDrive_Desktop_first-project_31592c4e._.js"
+    ]
+  }
+}

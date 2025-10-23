@@ -1,4 +1,35 @@
 {
-  "node": {},
+  "node": {
+    "007e1a91ef88e5bc6ba102f399a1ca0b32e2da77e3": {
+      "workers": {
+        "app/(root)/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(root)/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/OneDrive/Desktop/first-project/lib/actions/product.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signOutUser",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(root)/page": "action-browser"
+      },
+      "exportedName": "signOutUser",
+      "filename": "OneDrive/Desktop/first-project/lib/actions/user.actions.ts"
+    },
+    "00ab43f4709def5ab8b6debd595c2b4959d4b1b94f": {
+      "workers": {
+        "app/(root)/page": {
+          "moduleId": "[project]/OneDrive/Desktop/first-project/.next-internal/server/app/(root)/page/actions.js { ACTIONS_MODULE0 => \"[project]/OneDrive/Desktop/first-project/lib/actions/user.actions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/OneDrive/Desktop/first-project/lib/actions/product.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getLatestProducts",
+          "filename": "OneDrive/Desktop/first-project/lib/actions/product.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(root)/page": "rsc"
+      },
+      "exportedName": "getLatestProducts",
+      "filename": "OneDrive/Desktop/first-project/lib/actions/product.actions.ts"
+    }
+  },
   "edge": {}
 }
