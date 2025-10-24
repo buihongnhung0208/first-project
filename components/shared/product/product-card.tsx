@@ -21,14 +21,14 @@ const ProductCard = ({ product }: { product: any }) => {
   };
 
   return (
-    <Card className='w-full max-w-sm hover:shadow-lg transition-shadow duration-300 hover-lift'>
+    <Card className='w-full max-w-sm hover:shadow-lg transition-shadow duration-300 hover-lift mt-4'>
       <CardHeader className='p-0 items-center'>
         <Link href={`/product/${product.slug}`} className='cursor-pointer'>
           <Image
             priority={true}
             src={product.images![0] || '/placeholder-product.svg'}
             alt={product.name}
-            className='aspect-square object-cover rounded-t-lg hover-scale'
+            className='aspect-square object-cover rounded-t-lg hover-scale mx-auto'
             height={300}
             width={300}
           />

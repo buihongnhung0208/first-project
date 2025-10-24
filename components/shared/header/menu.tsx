@@ -3,8 +3,16 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import Link from 'next/link';
 import ModeToggle from './mode-toggle';
+import UserProfile from '../user-profile';
 
-const Menu = () => {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role?: string;
+}
+
+const Menu = ({ user }: { user: User | null }) => {
   return (
     <>
       <div className='flex justify-end gap-3'>
@@ -16,17 +24,20 @@ const Menu = () => {
               Cart
             </Link>
           </Button>
-          <Button asChild variant='outline'>
-            <Link href='/sign-in'>
-              <UserIcon />
-              Sign In
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href='/sign-up'>
-              Sign Up
-            </Link>
-          </Button>
+          {user ? <UserProfile showDetails={false} /> : <>
+            <Button asChild variant='outline'>
+              <Link href='/sign-in'>
+                <UserIcon />
+                Sign In
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href='/sign-up'>
+                Sign Up
+              </Link>
+            </Button>
+          </>}
+
         </nav>
         <nav className='md:hidden'>
           <Sheet>
@@ -42,17 +53,23 @@ const Menu = () => {
                   Cart
                 </Link>
               </Button>
-              <Button asChild variant='outline'>
-                <Link href='/sign-in'>
-                  <UserIcon />
-                  Sign In
-                </Link>
-              </Button>
-              <Button asChild>
-                <Link href='/sign-up'>
-                  Sign Up
-                </Link>
-              </Button>
+              {user ? (
+                <UserProfile showDetails={false} />
+              ) : (
+                <>
+                  <Button asChild variant='outline'>
+                    <Link href='/sign-in'>
+                      <UserIcon />
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href='/sign-up'>
+                      Sign Up
+                    </Link>
+                  </Button>
+                </>
+              )}
             </SheetContent>
           </Sheet>
         </nav>
