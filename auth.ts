@@ -1,5 +1,4 @@
 import { compareSync } from 'bcrypt-ts-edge';
-import { NextResponse } from 'next/server';
 import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -56,15 +55,6 @@ export const config = {
     }),
   ],
   callbacks: {
-    authorized({ request }: any) {
-      if (!request.cookies.get('sessionCartId')) {
-        const sessionCartId = crypto.randomUUID();
-        const response = NextResponse.next();
-        response.cookies.set('sessionCartId', sessionCartId);
-        return response;
-      }
-      return true;
-    },
     async jwt({ token, user, trigger, session }: any) {
       // Assign user fields to token
       if (user) {
@@ -108,4 +98,3 @@ export const config = {
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
-

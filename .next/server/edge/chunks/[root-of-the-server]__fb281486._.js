@@ -7424,22 +7424,9 @@ __turbopack_context__.s([
     "prisma",
     ()=>prisma
 ]);
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@neondatabase/serverless/index.mjs [middleware-edge] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$prisma$2f$adapter$2d$neon$2f$dist$2f$index$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@prisma/adapter-neon/dist/index.mjs [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$prisma$2f$default$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/generated/prisma/default.js [middleware-edge] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ws$2f$browser$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/ws/browser.js [middleware-edge] (ecmascript)");
 ;
-;
-;
-;
-__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$neondatabase$2f$serverless$2f$index$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["neonConfig"].webSocketConstructor = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$ws$2f$browser$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["default"];
-const connectionString = `${process.env.DATABASE_URL}`;
-const adapter = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$prisma$2f$adapter$2d$neon$2f$dist$2f$index$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["PrismaNeon"]({
-    connectionString
-});
-const prisma = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$prisma$2f$default$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["PrismaClient"]({
-    adapter
-}).$extends({
+const prisma = new __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$generated$2f$prisma$2f$default$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["PrismaClient"]().$extends({
     result: {
         product: {
             price: {
@@ -7472,13 +7459,10 @@ __turbopack_context__.s([
     ()=>signOut
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcrypt$2d$ts$2d$edge$2f$dist$2f$browser$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcrypt-ts-edge/dist/browser.mjs [middleware-edge] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$api$2f$server$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/api/server.js [middleware-edge] (ecmascript) <locals>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/server/web/exports/index.js [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/index.js [middleware-edge] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/credentials.js [middleware-edge] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/node_modules/@auth/core/providers/credentials.js [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/db/prisma.ts [middleware-edge] (ecmascript)");
-;
 ;
 ;
 ;
@@ -7530,15 +7514,6 @@ const config = {
         })
     ],
     callbacks: {
-        authorized ({ request }) {
-            if (!request.cookies.get('sessionCartId')) {
-                const sessionCartId = crypto.randomUUID();
-                const response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$web$2f$exports$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["NextResponse"].next();
-                response.cookies.set('sessionCartId', sessionCartId);
-                return response;
-            }
-            return true;
-        },
         async jwt ({ token, user, trigger, session }) {
             // Assign user fields to token
             if (user) {

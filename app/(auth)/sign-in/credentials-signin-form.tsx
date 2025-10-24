@@ -14,7 +14,7 @@ const CredentialsSignInForm = () => {
     message: '',
     success: false,
   });
-
+console.log('data1234', process.env.NEXTAUTH_SECRET);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
 
