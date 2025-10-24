@@ -4,6 +4,9 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Star, ShoppingCart, Heart, Share2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import AddToCart from '@/components/shared/product/add-to-cart';
+import { getMyCart } from '@/lib/actions/cart.actions';
+import { round2 } from '@/lib/utils';
 
 interface ProductDetailPageProps {
   params: Promise<{
@@ -31,6 +34,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound();
   }
 
+  const cart = await getMyCart();
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -44,9 +49,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       stars.push(
         <Star
           key={i}
-          className={`h-5 w-5 ${
-            i <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-          }`}
+          className={`h-5 w-5 ${i <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+            }`}
         />
       );
     }
@@ -77,7 +81,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
                   priority
                 />
               </div>
-              
+
               {/* Thumbnail Images */}
               {product.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
@@ -138,14 +142,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
               {/* Action Buttons */}
               <div className="space-y-4">
-                <Button 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 text-lg font-semibold cursor-pointer hover-lift"
-                  disabled={product.stock === 0}
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  {product.stock > 0 ? 'Thêm vào giỏ hàng' : 'Hết hàng'}
-                </Button>
-                
+                <AddToCart
+                  cart={cart}
+                  item={{
+                    productId: product.id,
+                    name: product.name,
+                    slug: product.slug,
+                    price: round2(Number(product.price)),
+                    qty: 1,
+                    image: product.images![0],
+                  }}
+                />
+
                 <div className="flex gap-3">
                   <Button variant="outline" className="flex-1 py-3 cursor-pointer hover-lift">
                     <Heart className="h-4 w-4 mr-2" />
