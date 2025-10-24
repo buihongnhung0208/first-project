@@ -1,4 +1,5 @@
 {
+  "/(auth)/sign-in/page": "app/(auth)/sign-in/page.js",
   "/(root)/cart/page": "app/(root)/cart/page.js",
   "/(root)/page": "app/(root)/page.js",
   "/(root)/product/[slug]/page": "app/(root)/product/[slug]/page.js",

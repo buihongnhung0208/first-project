@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Menu from './menu';
-import UserProfile from '../user-profile';
 
 interface User {
   id: string;
@@ -60,11 +59,5 @@ export default function AuthSection() {
     );
   }
 
-  // Nếu đã đăng nhập, chỉ hiển thị UserProfile
-  if (user) {
-    return <UserProfile />;
-  }
-
-  // Nếu chưa đăng nhập, hiển thị Menu
-  return <Menu />;
+  return <Menu user={user}/>;
 }
