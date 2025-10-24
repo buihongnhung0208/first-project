@@ -72,13 +72,18 @@ const round2 = (value)=>{
     }
 };
 function formatError(error) {
-    if (error.name === 'ZodError') {
-        // Handle Zod error
-        const fieldErrors = Object.keys(error.errors).map((field)=>{
-            const message = error.errors[field].message;
-            return typeof message === 'string' ? message : JSON.stringify(message);
-        });
-        return fieldErrors.join('. ');
+    if (error?.name === 'ZodError') {
+        // Handle Zod error (Zod v3 uses `issues`; also support `flatten()`)
+        if (Array.isArray(error.issues)) {
+            const messages = error.issues.map((issue)=>issue?.message).filter(Boolean);
+            if (messages.length > 0) return messages.join('. ');
+        }
+        if (typeof error.flatten === 'function') {
+            const flat = error.flatten();
+            const fieldMessages = Object.values(flat.fieldErrors || {}).flat();
+            if (fieldMessages.length > 0) return fieldMessages.join('. ');
+        }
+        return typeof error.message === 'string' ? error.message : 'Invalid input';
     } else if (error.name === 'PrismaClientKnownRequestError' && error.code === 'P2002') {
         // Handle Prisma error
         const field = error.meta?.target ? error.meta.target[0] : 'Field';
