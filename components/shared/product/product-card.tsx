@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductPrice from '@/components/shared/product/product-price';
-import AddToCart from '@/components/shared/product/add-to-cart';
 import { Star } from 'lucide-react';
 
 const ProductCard = ({ product }: { product: any }) => {
@@ -40,16 +39,6 @@ const ProductCard = ({ product }: { product: any }) => {
           <span className='text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded'>
             {product.brand}
           </span>
-          <AddToCart
-            item={{
-              productId: product.id,
-              name: product.name,
-              slug: product.slug,
-              price: product.price,
-              qty: 1,
-              image: product.images![0],
-            }}
-          />
         </div>
         
         <Link href={`/product/${product.slug}`} className='cursor-pointer'>
