@@ -7,17 +7,17 @@ const ProductPrice = ({
   value: number;
   className?: string;
 }) => {
-  // Ensures two decimal places
-  const stringValue = value.toFixed(2); 
-  // Split into integer and decimal parts
-  const [intValue, floatValue] = stringValue.split('.'); 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(price);
+  };
 
   return (
-    <p className={cn('text-2xl', className)}>
-      <span className='text-xs align-super'>$</span>
-      {intValue}
-      <span className='text-xs align-super'>.{floatValue}</span>
-    </p>
+    <span className={cn('text-lg font-bold text-blue-600', className)}>
+      {formatPrice(value)}
+    </span>
   );
 };
 

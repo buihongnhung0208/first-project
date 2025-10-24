@@ -21,13 +21,21 @@ export default function AuthSection() {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch("/api/auth/session");
+      const response = await fetch("/api/session");
       if (response.ok) {
         const data = await response.json();
-        setUser(data.user);
+        // Kiểm tra data và data.user trước khi set
+        if (data && data.user) {
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
       }
     } catch (error) {
       console.error("Error fetching user:", error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
