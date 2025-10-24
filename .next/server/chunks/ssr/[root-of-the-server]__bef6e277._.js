@@ -8526,13 +8526,18 @@ const round2 = (value)=>{
     }
 };
 function formatError(error) {
-    if (error.name === 'ZodError') {
-        // Handle Zod error
-        const fieldErrors = Object.keys(error.errors).map((field)=>{
-            const message = error.errors[field].message;
-            return typeof message === 'string' ? message : JSON.stringify(message);
-        });
-        return fieldErrors.join('. ');
+    if (error?.name === 'ZodError') {
+        // Handle Zod error (Zod v3 uses `issues`; also support `flatten()`)
+        if (Array.isArray(error.issues)) {
+            const messages = error.issues.map((issue)=>issue?.message).filter(Boolean);
+            if (messages.length > 0) return messages.join('. ');
+        }
+        if (typeof error.flatten === 'function') {
+            const flat = error.flatten();
+            const fieldMessages = Object.values(flat.fieldErrors || {}).flat();
+            if (fieldMessages.length > 0) return fieldMessages.join('. ');
+        }
+        return typeof error.message === 'string' ? error.message : 'Invalid input';
     } else if (error.name === 'PrismaClientKnownRequestError' && error.code === 'P2002') {
         // Handle Prisma error
         const field = error.meta?.target ? error.meta.target[0] : 'Field';
@@ -8563,13 +8568,15 @@ function formatCurrency(amount) {
 "[project]/lib/actions/user.actions.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/* __next_internal_action_entry_do_not_use__ [{"009a163ff8e28c9933376d4206c31f426339548d5a":"signOutUser","60afb5381a06871fb7f30bae28e8ec9338fabbf962":"signInWithCredentials","60de075bb730aa48bb447c16dfca6b60c1410e2487":"signUp"},"",""] */ __turbopack_context__.s([
+/* __next_internal_action_entry_do_not_use__ [{"009a163ff8e28c9933376d4206c31f426339548d5a":"signOutUser","4010fe4f4f2a99de252dcb9d0ce2c77a5bb497f222":"updateUserAddress","60afb5381a06871fb7f30bae28e8ec9338fabbf962":"signInWithCredentials","60de075bb730aa48bb447c16dfca6b60c1410e2487":"signUp"},"",""] */ __turbopack_context__.s([
     "signInWithCredentials",
     ()=>signInWithCredentials,
     "signOutUser",
     ()=>signOutUser,
     "signUp",
-    ()=>signUp
+    ()=>signUp,
+    "updateUserAddress",
+    ()=>updateUserAddress
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/server-reference.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$auth$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/auth.ts [app-rsc] (ecmascript)");
@@ -8584,6 +8591,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 ;
+im;
 async function signInWithCredentials(prevState, formData) {
     try {
         const email = formData.get('email');
@@ -8661,15 +8669,46 @@ async function signOutUser() {
         redirectTo: '/'
     });
 }
+async function updateUserAddress(data) {
+    try {
+        const session = await auth();
+        const currentUser = await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findFirst({
+            where: {
+                id: session?.user?.id
+            }
+        });
+        if (!currentUser) throw new Error('User not found');
+        const address = shippingAddressSchema.parse(data);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.update({
+            where: {
+                id: currentUser.id
+            },
+            data: {
+                address
+            }
+        });
+        return {
+            success: true,
+            message: 'User updated successfully'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["formatError"])(error)
+        };
+    }
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     signInWithCredentials,
     signUp,
-    signOutUser
+    signOutUser,
+    updateUserAddress
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signInWithCredentials, "60afb5381a06871fb7f30bae28e8ec9338fabbf962", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signUp, "60de075bb730aa48bb447c16dfca6b60c1410e2487", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signOutUser, "009a163ff8e28c9933376d4206c31f426339548d5a", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(updateUserAddress, "4010fe4f4f2a99de252dcb9d0ce2c77a5bb497f222", null);
 }),
 "[project]/.next-internal/server/app/(auth)/sign-in/page/actions.js { ACTIONS_MODULE0 => \"[project]/lib/actions/user.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript) <locals>", ((__turbopack_context__) => {
 "use strict";

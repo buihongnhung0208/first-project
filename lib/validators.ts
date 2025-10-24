@@ -28,9 +28,12 @@ export const cartItemSchema = z.object({
       productId: z.string().min(1, 'Product is required'),
       name: z.string().min(1, 'Name is required'),
       slug: z.string().min(1, 'Slug is required'),
-      qty: z.number().int().nonnegative('Quantity must be a non-negative number'),
+      qty: z.coerce
+            .number()
+            .int()
+            .nonnegative('Quantity must be a non-negative number'),
       image: z.string().min(1, 'Image is required'),
-      price: z
+      price: z.coerce
             .number()
             .refine(
                   (value) => /^\d+(\.\d{2})?$/.test(Number(value).toFixed(2)),
@@ -47,6 +50,21 @@ export const insertCartSchema = z.object({
       sessionCartId: z.string().min(1, 'Session cart id is required'),
       userId: z.string().optional().nullable(),
 });
+
+// Looser schema for client input when adding to cart
+export const addToCartInputSchema = z
+      .object({
+            productId: z.string().optional(),
+            slug: z.string().optional(),
+            name: z.string().optional(),
+            image: z.string().optional(),
+            price: z.coerce.number().optional(),
+            qty: z.coerce.number().default(1),
+      })
+      .refine((data) => Boolean(data.productId || data.slug), {
+            message: 'Product identifier is required',
+            path: ['productId'],
+      });
 
 export const shippingAddressSchema = z.object({
       fullName: z.string().min(3, 'Name must be at least 3 characters'),
