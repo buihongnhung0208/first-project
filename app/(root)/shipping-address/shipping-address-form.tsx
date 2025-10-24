@@ -10,7 +10,8 @@ import { ControllerRenderProps } from 'react-hook-form';
 import { shippingAddressDefaultValues } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
 import { useTransition } from 'react';    
-// Removed CheckoutSteps import for now (component not found in codebase)
+import CheckoutSteps from '@/components/shared/checkout-steps';
+
 import {
   Form,
   FormControl,
@@ -22,6 +23,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Loader } from 'lucide-react';
+import { updateUserAddress } from '@/lib/actions/user.actions';
+
 
 const ShippingAddressForm = ({
   address,
@@ -36,15 +39,25 @@ const ShippingAddressForm = ({
   });
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = () => {};
+  const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = async (
+    values
+  ) => {
+    startTransition(async () => {
+      const res = await updateUserAddress(values);
+  
+      if (!res.success) {
+        toast.error(res.message || "Something went wrong!!!!");
+        return;
+      }
+  
+      router.push('/payment-method');
+    });
+  };
 
   return (
     <>
+      {/* <CheckoutSteps current={1} /> */}
       <div className='max-w-md mx-auto space-y-4'>
-        <h1 className='h2-bold mt-4'>Shipping Address</h1>
-        <p className='text-sm text-muted-foreground'>
-          Please enter the address that you want to ship to
-        </p>
         <Form {...form}>
           <form
             method='post'
@@ -61,7 +74,7 @@ const ShippingAddressForm = ({
                   field: ControllerRenderProps<
                     z.infer<typeof shippingAddressSchema>,
                     'fullName'
-                  >;
+                  >
                 }) => (
                   <FormItem className='w-full'>
                     <FormLabel>Full Name</FormLabel>
