@@ -8526,13 +8526,18 @@ const round2 = (value)=>{
     }
 };
 function formatError(error) {
-    if (error.name === 'ZodError') {
-        // Handle Zod error
-        const fieldErrors = Object.keys(error.errors).map((field)=>{
-            const message = error.errors[field].message;
-            return typeof message === 'string' ? message : JSON.stringify(message);
-        });
-        return fieldErrors.join('. ');
+    if (error?.name === 'ZodError') {
+        // Handle Zod error (Zod v3 uses `issues`; also support `flatten()`)
+        if (Array.isArray(error.issues)) {
+            const messages = error.issues.map((issue)=>issue?.message).filter(Boolean);
+            if (messages.length > 0) return messages.join('. ');
+        }
+        if (typeof error.flatten === 'function') {
+            const flat = error.flatten();
+            const fieldMessages = Object.values(flat.fieldErrors || {}).flat();
+            if (fieldMessages.length > 0) return fieldMessages.join('. ');
+        }
+        return typeof error.message === 'string' ? error.message : 'Invalid input';
     } else if (error.name === 'PrismaClientKnownRequestError' && error.code === 'P2002') {
         // Handle Prisma error
         const field = error.meta?.target ? error.meta.target[0] : 'Field';
@@ -8563,13 +8568,15 @@ function formatCurrency(amount) {
 "[project]/lib/actions/user.actions.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/* __next_internal_action_entry_do_not_use__ [{"009a163ff8e28c9933376d4206c31f426339548d5a":"signOutUser","60afb5381a06871fb7f30bae28e8ec9338fabbf962":"signInWithCredentials","60de075bb730aa48bb447c16dfca6b60c1410e2487":"signUp"},"",""] */ __turbopack_context__.s([
+/* __next_internal_action_entry_do_not_use__ [{"009a163ff8e28c9933376d4206c31f426339548d5a":"signOutUser","4010fe4f4f2a99de252dcb9d0ce2c77a5bb497f222":"updateUserAddress","60afb5381a06871fb7f30bae28e8ec9338fabbf962":"signInWithCredentials","60de075bb730aa48bb447c16dfca6b60c1410e2487":"signUp"},"",""] */ __turbopack_context__.s([
     "signInWithCredentials",
     ()=>signInWithCredentials,
     "signOutUser",
     ()=>signOutUser,
     "signUp",
-    ()=>signUp
+    ()=>signUp,
+    "updateUserAddress",
+    ()=>updateUserAddress
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/server-reference.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$auth$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/auth.ts [app-rsc] (ecmascript)");
@@ -8584,6 +8591,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 ;
+im;
 async function signInWithCredentials(prevState, formData) {
     try {
         const email = formData.get('email');
@@ -8661,20 +8669,53 @@ async function signOutUser() {
         redirectTo: '/'
     });
 }
+async function updateUserAddress(data) {
+    try {
+        const session = await auth();
+        const currentUser = await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findFirst({
+            where: {
+                id: session?.user?.id
+            }
+        });
+        if (!currentUser) throw new Error('User not found');
+        const address = shippingAddressSchema.parse(data);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.update({
+            where: {
+                id: currentUser.id
+            },
+            data: {
+                address
+            }
+        });
+        return {
+            success: true,
+            message: 'User updated successfully'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["formatError"])(error)
+        };
+    }
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     signInWithCredentials,
     signUp,
-    signOutUser
+    signOutUser,
+    updateUserAddress
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signInWithCredentials, "60afb5381a06871fb7f30bae28e8ec9338fabbf962", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signUp, "60de075bb730aa48bb447c16dfca6b60c1410e2487", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(signOutUser, "009a163ff8e28c9933376d4206c31f426339548d5a", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(updateUserAddress, "4010fe4f4f2a99de252dcb9d0ce2c77a5bb497f222", null);
 }),
 "[project]/lib/validators.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
+    "addToCartInputSchema",
+    ()=>addToCartInputSchema,
     "cartItemSchema",
     ()=>cartItemSchema,
     "formatNumberWithDecimal",
@@ -8708,9 +8749,9 @@ const cartItemSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modu
     productId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, 'Product is required'),
     name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, 'Name is required'),
     slug: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, 'Slug is required'),
-    qty: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number().int().nonnegative('Quantity must be a non-negative number'),
+    qty: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().int().nonnegative('Quantity must be a non-negative number'),
     image: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, 'Image is required'),
-    price: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].number().refine((value)=>/^\d+(\.\d{2})?$/.test(Number(value).toFixed(2)), 'Price must have exactly two decimal places (e.g., 49.99)')
+    price: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().refine((value)=>/^\d+(\.\d{2})?$/.test(Number(value).toFixed(2)), 'Price must have exactly two decimal places (e.g., 49.99)')
 });
 const insertCartSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
     items: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].array(cartItemSchema),
@@ -8720,6 +8761,19 @@ const insertCartSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_mo
     taxPrice: currency,
     sessionCartId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(1, 'Session cart id is required'),
     userId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional().nullable()
+});
+const addToCartInputSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
+    productId: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional(),
+    slug: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional(),
+    name: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional(),
+    image: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().optional(),
+    price: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().optional(),
+    qty: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].coerce.number().default(1)
+}).refine((data)=>Boolean(data.productId || data.slug), {
+    message: 'Product identifier is required',
+    path: [
+        'productId'
+    ]
 });
 const shippingAddressSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].object({
     fullName: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$v4$2f$classic$2f$external$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$export__$2a$__as__z$3e$__["z"].string().min(3, 'Name must be at least 3 characters'),
@@ -8734,13 +8788,15 @@ const shippingAddressSchema = __TURBOPACK__imported__module__$5b$project$5d2f$no
 "[project]/lib/actions/cart.actions.ts [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/* __next_internal_action_entry_do_not_use__ [{"00d27c7f6f61009de0dee6bd5c097cd9f2f7039932":"getMyCart","40b105fa34baa0a65643052a81f33ca9d9b8d41ae8":"removeItemFromCart","7f2ba547b95a6929fa4581e60505c58d39f18a2185":"addItemToCart"},"",""] */ __turbopack_context__.s([
+/* __next_internal_action_entry_do_not_use__ [{"00d27c7f6f61009de0dee6bd5c097cd9f2f7039932":"getMyCart","40b105fa34baa0a65643052a81f33ca9d9b8d41ae8":"removeItemFromCart","40cf3bb93b0648fb9cc401ea8b1132d0460ba605a1":"updateUserAddress","7f2ba547b95a6929fa4581e60505c58d39f18a2185":"addItemToCart"},"",""] */ __turbopack_context__.s([
     "addItemToCart",
     ()=>addItemToCart,
     "getMyCart",
     ()=>getMyCart,
     "removeItemFromCart",
-    ()=>removeItemFromCart
+    ()=>removeItemFromCart,
+    "updateUserAddress",
+    ()=>updateUserAddress
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/build/webpack/loaders/next-flight-loader/server-reference.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/headers.js [app-rsc] (ecmascript)");
@@ -8763,25 +8819,34 @@ const addItemToCart = async (data)=>{
         if (!sessionCartId) throw new Error('Cart Session not found');
         // Get cart from database (if exists)
         const cart = await getMyCart();
-        // Parse and validate submitted item data
-        const item = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validators$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cartItemSchema"].parse(data);
-        // Find product in database
+        // Accept loose input, find product by id or slug, then build canonical item
+        const parsedInput = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validators$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["addToCartInputSchema"].parse(data);
         const product = await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].product.findFirst({
-            where: {
-                id: item.productId
+            where: parsedInput.productId ? {
+                id: parsedInput.productId
+            } : {
+                slug: parsedInput.slug
             }
         });
         if (!product) throw new Error('Product not found');
+        const canonicalItem = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validators$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cartItemSchema"].parse({
+            productId: product.id,
+            name: product.name,
+            slug: product.slug,
+            image: product.images[0],
+            price: Number(product.price),
+            qty: parsedInput.qty ?? 1
+        });
         if (!cart) {
             // Create new cart object
             const newCart = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$validators$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["insertCartSchema"].parse({
                 //   userId: userId,
                 items: [
-                    item
+                    canonicalItem
                 ],
                 sessionCartId: sessionCartId,
                 ...calcPrice([
-                    item
+                    canonicalItem
                 ])
             });
             // Add to database
@@ -8796,18 +8861,18 @@ const addItemToCart = async (data)=>{
             };
         } else {
             // Check for existing item in cart
-            const existItem = cart.items.find((x)=>x.productId === item.productId);
+            const existItem = cart.items.find((x)=>x.productId === canonicalItem.productId);
             // If not enough stock, throw error
             if (existItem) {
                 if (product.stock < existItem.qty + 1) {
                     throw new Error('Not enough stock');
                 }
                 // Increase quantity of existing item
-                cart.items.find((x)=>x.productId === item.productId).qty = existItem.qty + 1;
+                cart.items.find((x)=>x.productId === canonicalItem.productId).qty = existItem.qty + 1;
             } else {
                 // If stock, add item to cart
                 if (product.stock < 1) throw new Error('Not enough stock');
-                cart.items.push(item);
+                cart.items.push(canonicalItem);
             }
             // Save to database
             await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].cart.update({
@@ -8826,6 +8891,7 @@ const addItemToCart = async (data)=>{
             };
         }
     } catch (error) {
+        console.log("error", error);
         return {
             success: false,
             message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["formatError"])(error)
@@ -8911,15 +8977,46 @@ async function removeItemFromCart(productId) {
         };
     }
 }
+async function updateUserAddress(data) {
+    try {
+        const session = await auth();
+        const currentUser = await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findFirst({
+            where: {
+                id: session?.user?.id
+            }
+        });
+        if (!currentUser) throw new Error('User not found');
+        const address = shippingAddressSchema.parse(data);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.update({
+            where: {
+                id: currentUser.id
+            },
+            data: {
+                address
+            }
+        });
+        return {
+            success: true,
+            message: 'User updated successfully'
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["formatError"])(error)
+        };
+    }
+}
 ;
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$action$2d$validate$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["ensureServerEntryExports"])([
     addItemToCart,
     getMyCart,
-    removeItemFromCart
+    removeItemFromCart,
+    updateUserAddress
 ]);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(addItemToCart, "7f2ba547b95a6929fa4581e60505c58d39f18a2185", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(getMyCart, "00d27c7f6f61009de0dee6bd5c097cd9f2f7039932", null);
 (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(removeItemFromCart, "40b105fa34baa0a65643052a81f33ca9d9b8d41ae8", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])(updateUserAddress, "40cf3bb93b0648fb9cc401ea8b1132d0460ba605a1", null);
 }),
 "[project]/.next-internal/server/app/(root)/page/actions.js { ACTIONS_MODULE0 => \"[project]/lib/actions/user.actions.ts [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/lib/actions/cart.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript) <locals>", ((__turbopack_context__) => {
 "use strict";

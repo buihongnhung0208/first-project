@@ -7460,9 +7460,12 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcrypt$2d$ts$2d$edge$2f$dist$2f$browser$2e$mjs__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcrypt-ts-edge/dist/browser.mjs [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/index.js [middleware-edge] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$api$2f$headers$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/api/headers.js [middleware-edge] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$request$2f$cookies$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/esm/server/request/cookies.js [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/credentials.js [middleware-edge] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/node_modules/@auth/core/providers/credentials.js [middleware-edge] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/db/prisma.ts [middleware-edge] (ecmascript)");
+;
 ;
 ;
 ;
@@ -7514,28 +7517,57 @@ const config = {
         })
     ],
     callbacks: {
+        authorized ({ request, auth }) {
+            // Array of regex patterns of protected paths
+            const protectedPaths = [
+                /\/shipping-address/,
+                /\/payment-method/,
+                /\/place-order/,
+                /\/profile/,
+                /\/user\/(.*)/,
+                /\/order\/(.*)/,
+                /\/admin/
+            ];
+            // Get pathname from the req URL object
+            const { pathname } = request.nextUrl;
+            // Check if user is not authenticated and on a protected path
+            if (!auth && protectedPaths.some((p)=>p.test(pathname))) return false;
+            // Allow all other routes (including assets and sign-in)
+            return true;
+        },
         async jwt ({ token, user, trigger, session }) {
-            // Assign user fields to token
             if (user) {
+                // Assign user properties to the token
                 token.id = user.id;
                 token.role = user.role;
-                // If user has no name, use email as their default name
-                if (user.name === 'NO_NAME') {
-                    token.name = user.email.split('@')[0];
-                    // Update the user in the database with the new name
-                    await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["prisma"].user.update({
-                        where: {
-                            id: user.id
-                        },
-                        data: {
-                            name: token.name
+                if (trigger === 'signIn' || trigger === 'signUp') {
+                    const cookiesObject = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$esm$2f$server$2f$request$2f$cookies$2e$js__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["cookies"])();
+                    const sessionCartId = cookiesObject.get('sessionCartId')?.value;
+                    if (sessionCartId) {
+                        const sessionCart = await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["prisma"].cart.findFirst({
+                            where: {
+                                sessionCartId
+                            }
+                        });
+                        if (sessionCart) {
+                            // Overwrite any existing user cart
+                            await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["prisma"].cart.deleteMany({
+                                where: {
+                                    userId: user.id
+                                }
+                            });
+                            // Assign the guest cart to the logged-in user
+                            await __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$middleware$2d$edge$5d$__$28$ecmascript$29$__["prisma"].cart.update({
+                                where: {
+                                    id: sessionCart.id
+                                },
+                                data: {
+                                    userId: user.id
+                                }
+                            });
                         }
-                    });
+                    }
                 }
-            }
-            // Handle session updates (e.g., name change)
-            if (session?.user.name && trigger === 'update') {
-                token.name = session.user.name;
             }
             return token;
         },

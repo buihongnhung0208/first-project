@@ -4,14 +4,14 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { formatError, round2 } from '../utils';
-import { cartItemSchema, insertCartSchema } from '../validators';
+import { addToCartInputSchema, cartItemSchema, insertCartSchema, shippingAddressSchema } from '../validators';
 import { prisma } from '@/db/prisma';
-import { CartItem } from '@/types';
+import { CartItem, ShippingAddress } from '@/types';
 import { convertToPlainObject } from '../utils';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { auth } from '@/auth';
 
 export const addItemToCart = async (
-      data: z.infer<typeof cartItemSchema>,
+      data: z.infer<typeof addToCartInputSchema>,
 ): Promise<{ success: boolean; message: string }> => {
       try {
             // Check for session cart cookie
@@ -19,20 +19,29 @@ export const addItemToCart = async (
             if (!sessionCartId) throw new Error('Cart Session not found');
             // Get cart from database (if exists)
             const cart = await getMyCart();
-            // Parse and validate submitted item data
-            const item = cartItemSchema.parse(data);
-            // Find product in database
+            // Accept loose input, find product by id or slug, then build canonical item
+            const parsedInput = addToCartInputSchema.parse(data);
             const product = await prisma.product.findFirst({
-                  where: { id: item.productId },
+                  where: parsedInput.productId
+                        ? { id: parsedInput.productId }
+                        : { slug: parsedInput.slug as string },
             });
             if (!product) throw new Error('Product not found');
+            const canonicalItem = cartItemSchema.parse({
+                  productId: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  image: product.images[0],
+                  price: Number(product.price),
+                  qty: parsedInput.qty ?? 1,
+            });
             if (!cart) {
                   // Create new cart object
                   const newCart = insertCartSchema.parse({
                         //   userId: userId,
-                        items: [item],
+                        items: [canonicalItem],
                         sessionCartId: sessionCartId,
-                        ...calcPrice([item]),
+                        ...calcPrice([canonicalItem]),
                   });
                   // Add to database
                   await prisma.cart.create({
@@ -49,7 +58,7 @@ export const addItemToCart = async (
             } else {
                   // Check for existing item in cart
                   const existItem = (cart.items as CartItem[]).find(
-                        (x) => x.productId === item.productId
+                        (x) => x.productId === canonicalItem.productId
                   );
                   // If not enough stock, throw error
                   if (existItem) {
@@ -59,12 +68,12 @@ export const addItemToCart = async (
 
                         // Increase quantity of existing item
                         (cart.items as CartItem[]).find(
-                              (x) => x.productId === item.productId
+                              (x) => x.productId === canonicalItem.productId
                         )!.qty = existItem.qty + 1;
                   } else {
                         // If stock, add item to cart
                         if (product.stock < 1) throw new Error('Not enough stock');
-                        cart.items.push(item);
+                        cart.items.push(canonicalItem);
                   }
 
                   // Save to database
@@ -86,6 +95,7 @@ export const addItemToCart = async (
             }
 
       } catch (error) {
+            console.log("error",error)
             return { success: false, message: formatError(error) };
       }
 };
@@ -186,3 +196,29 @@ export async function removeItemFromCart(productId: string) {
             return { success: false, message: formatError(error) };
       }
 };
+
+export async function updateUserAddress(data: ShippingAddress) {
+  try {
+    const session = await auth();
+
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id! },
+    });
+
+    if (!currentUser) throw new Error('User not found');
+
+    const address = shippingAddressSchema.parse(data);
+
+    await prisma.user.update({
+      where: { id: currentUser.id },
+      data: { address },
+    });
+
+    return {
+      success: true,
+      message: 'User updated successfully',
+    };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
+}
