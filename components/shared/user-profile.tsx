@@ -21,7 +21,7 @@ interface User {
   role?: string;
 }
 
-export default function UserProfile() {
+export default function UserProfile({ showDetails = true }: { showDetails?: boolean }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -79,7 +79,7 @@ export default function UserProfile() {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu >
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <div className="flex items-center gap-2">
@@ -88,10 +88,12 @@ export default function UserProfile() {
                 {user.name.charAt(0).toUpperCase()}
               </span>
             </div>
-            <div className="hidden md:block text-left">
-              <div className="text-sm font-medium">{user.name}</div>
-              <div className="text-xs text-gray-500">{user.email}</div>
-            </div>
+            {showDetails && (
+              <div className="hidden md:block text-left">
+                <div className="text-sm font-medium">{user.name}</div>
+                <div className="text-xs text-gray-500">{user.email}</div>
+              </div>
+            )}
           </div>
         </Button>
       </DropdownMenuTrigger>

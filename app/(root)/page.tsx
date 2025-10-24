@@ -15,7 +15,6 @@ const HomePage = async () => {
 
   return (
     <div className='space-y-8'>
-      <h2 className='h2-bold'>Sản phẩm mới nhất</h2>
       <ProductList title='Sản phẩm nổi bật' data={products} limit={8} />
     </div>
   );

@@ -116,6 +116,21 @@
       },
       "filename": "lib/actions/cart.actions.ts",
       "exportedName": "addItemToCart"
+    },
+    "60f4f6620c3d826ac0ac2ef24fe6da8703965503d6": {
+      "workers": {
+        "app/(auth)/sign-in/page": {
+          "moduleId": "[project]/.next-internal/server/app/(auth)/sign-in/page/actions.js { ACTIONS_MODULE0 => \"[project]/lib/actions/user.actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "signInWithCredentials",
+          "filename": "lib/actions/user.actions.ts"
+        }
+      },
+      "layer": {
+        "app/(auth)/sign-in/page": "action-browser"
+      },
+      "filename": "lib/actions/user.actions.ts",
+      "exportedName": "signInWithCredentials"
     }
   },
   "edge": {},
