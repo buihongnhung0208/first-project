@@ -8431,12 +8431,10 @@ __turbopack_context__.s([
     ()=>signOut
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcrypt$2d$ts$2d$edge$2f$dist$2f$node$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/bcrypt-ts-edge/dist/node.mjs [app-rsc] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/index.js [app-rsc] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$providers$2f$credentials$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/next-auth/providers/credentials.js [app-rsc] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2d$auth$2f$node_modules$2f40$auth$2f$core$2f$providers$2f$credentials$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next-auth/node_modules/@auth/core/providers/credentials.js [app-rsc] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$db$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/db/prisma.ts [app-rsc] (ecmascript)");
-;
 ;
 ;
 ;
@@ -8488,15 +8486,6 @@ const config = {
         })
     ],
     callbacks: {
-        authorized ({ request }) {
-            if (!request.cookies.get('sessionCartId')) {
-                const sessionCartId = crypto.randomUUID();
-                const response = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["NextResponse"].next();
-                response.cookies.set('sessionCartId', sessionCartId);
-                return response;
-            }
-            return true;
-        },
         async jwt ({ token, user, trigger, session }) {
             // Assign user fields to token
             if (user) {
@@ -8653,15 +8642,17 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 ;
 async function signInWithCredentials(prevState, formData) {
+    console.log('User:', formData);
     try {
         const user = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$constants$2f$validator$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["signInFormSchema"].parse({
             email: formData.get('email'),
             password: formData.get('password')
         });
         const callbackUrl = formData.get('callbackUrl') || '/';
-        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$auth$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["signIn"])('credentials', {
+        const result = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$auth$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["signIn"])('credentials', {
             ...user,
-            callbackUrl
+            redirect: true,
+            redirectTo: callbackUrl
         });
         return {
             success: true,
