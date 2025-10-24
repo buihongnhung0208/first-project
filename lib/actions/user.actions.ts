@@ -12,17 +12,28 @@ export async function signInWithCredentials(
   formData: FormData
 ) {
   try {
+    const email = formData.get('email');
+    const password = formData.get('password');
+    
+    console.log("🔍 DEBUG: Form data received:");
+    console.log("🔍 DEBUG: Email:", email);
+    console.log("🔍 DEBUG: Password:", password);
+
     const user = signInFormSchema.parse({
-      email: formData.get('email'),
-      password: formData.get('password'),
+      email: email,
+      password: password,
     });
 
+    console.log("🔍 DEBUG: Parsed user data:", { email: user.email, password: user.password });
+
     const callbackUrl = formData.get('callbackUrl') as string || '/';
+    console.log("🔍 DEBUG: Callback URL:", callbackUrl);
 
     await signIn('credentials', { ...user, callbackUrl });
 
     return { success: true, message: 'Signed in successfully' };
   } catch (error) {
+    console.log("❌ DEBUG: Error in signInWithCredentials:", error);
     if (error instanceof Error && error.message?.includes('NEXT_REDIRECT')) {
       throw error;
     }
