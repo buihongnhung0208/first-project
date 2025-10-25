@@ -9,3 +9,4 @@
 .env.production
 
 /lib/generated/prisma
+.next

@@ -15,8 +15,21 @@ export const addItemToCart = async (
 ): Promise<{ success: boolean; message: string }> => {
       try {
             // Check for session cart cookie
-            const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-            if (!sessionCartId) throw new Error('Cart Session not found');
+             const cookieStore = await cookies();
+            let sessionCartId = cookieStore.get('sessionCartId')?.value;
+            
+            if (!sessionCartId) {
+                  // Generate new session cart ID
+                  sessionCartId = crypto.randomUUID();
+                  cookieStore.set({
+                        name: 'sessionCartId',
+                        value: sessionCartId,
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'lax',
+                        maxAge: 60 * 60 * 24 * 30, 
+                  });
+            }
             // Get cart from database (if exists)
             const cart = await getMyCart();
             // Accept loose input, find product by id or slug, then build canonical item
