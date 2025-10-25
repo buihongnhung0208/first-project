@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { addItemToCart, removeItemFromCart } from '@/lib/actions/cart.actions';
+import { dispatchCartUpdate } from '@/lib/utils/cart-events';
 
 const AddToCart = ({
       cart,
@@ -25,6 +26,7 @@ const AddToCart = ({
                         toast.error(res.message || "Something went wrong!!!!");
                         return;
                   }
+                  dispatchCartUpdate();
                   toast(`${item.name} added to the cart`, {
                         action: {
                               label: 'Go to cart',
@@ -37,6 +39,7 @@ const AddToCart = ({
       const handleRemoveFromCart = async () => {
             startTransition(async () => {
                   const res = await removeItemFromCart(item.productId);
+                  dispatchCartUpdate();
                   toast(res.message);
             });
       };

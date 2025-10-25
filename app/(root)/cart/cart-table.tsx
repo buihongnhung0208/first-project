@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/utils';
+import { dispatchCartUpdate } from '@/lib/utils/cart-events';
 
 import {
       Table,
@@ -70,6 +71,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                                                                                           toast.error(res.message || "Something went wrong!!!!");
                                                                                           return;
                                                                                     }
+                                                                                    dispatchCartUpdate();
                                                                               })
                                                                         }
                                                                   >
@@ -91,6 +93,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                                                                                           toast.error(res.message || "Something went wrong!!!!");
                                                                                           return;
                                                                                     }
+                                                                                    dispatchCartUpdate();
                                                                               })
                                                                         }
                                                                   >
