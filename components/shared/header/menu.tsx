@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/s
 import Link from 'next/link';
 import ModeToggle from './mode-toggle';
 import UserProfile from '../user-profile';
+import CartCount from './cart-count';
 
 interface User {
   id: string;
@@ -19,9 +20,10 @@ const Menu = ({ user }: { user: User | null }) => {
         <nav className='md:flex hidden w-full max-w-xs gap-1'>
           <ModeToggle />
           <Button asChild variant='ghost'>
-            <Link href='/cart'>
+            <Link href='/cart' className='relative'>
               <ShoppingCart />
               Cart
+              <CartCount />
             </Link>
           </Button>
           {user ? <UserProfile showDetails={false} /> : <>
@@ -48,9 +50,10 @@ const Menu = ({ user }: { user: User | null }) => {
               <SheetTitle>Menu</SheetTitle>
               <ModeToggle />
               <Button asChild variant='ghost'>
-                <Link href='/cart'>
+                <Link href='/cart' className='relative'>
                   <ShoppingCart />
                   Cart
+                  <CartCount />
                 </Link>
               </Button>
               {user ? (
