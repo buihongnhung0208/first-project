@@ -53,7 +53,7 @@ const CartCount = () => {
   }
 
   return (
-    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+    <span className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg border-2 border-white animate-pulse hover:animate-none hover:scale-110 transition-all duration-200">
       {cartCount > 99 ? '99+' : cartCount}
     </span>
   );

@@ -21,10 +21,14 @@ console.log('data1234', process.env.NEXTAUTH_SECRET);
   const SignInButton = () => {
     const { pending } = useFormStatus();
     return (
-      <Button disabled={pending} className='w-full' variant='default'>
+      <Button 
+        disabled={pending} 
+        className='w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]' 
+        variant='default'
+      >
         {pending ? (
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             Đang đăng nhập...
           </div>
         ) : (
@@ -35,11 +39,14 @@ console.log('data1234', process.env.NEXTAUTH_SECRET);
   };
 
   return (
-    <form action={action}>
+    <form action={action} className="space-y-6">
       <input type='hidden' name='callbackUrl' value={callbackUrl} />
+      
       <div className='space-y-6'>
-        <div>
-          <Label htmlFor='email'>Email</Label>
+        <div className="space-y-2">
+          <Label htmlFor='email' className="text-sm font-semibold text-gray-700">
+            Email
+          </Label>
           <Input
             id='email'
             name='email'
@@ -48,11 +55,14 @@ console.log('data1234', process.env.NEXTAUTH_SECRET);
             placeholder='Nhập email của bạn'
             defaultValue={signInDefaultValues.email}
             autoComplete='email'
-            className='mt-1'
+            className='h-12 px-4 text-base border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200'
           />
         </div>
-        <div>
-          <Label htmlFor='password'>Mật khẩu</Label>
+        
+        <div className="space-y-2">
+          <Label htmlFor='password' className="text-sm font-semibold text-gray-700">
+            Mật khẩu
+          </Label>
           <Input
             id='password'
             name='password'
@@ -61,24 +71,30 @@ console.log('data1234', process.env.NEXTAUTH_SECRET);
             placeholder='Nhập mật khẩu'
             defaultValue={signInDefaultValues.password}
             autoComplete='current-password'
-            className='mt-1'
+            className='h-12 px-4 text-base border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200'
           />
         </div>
+        
         <div>
           <SignInButton />
         </div>
 
         {data && !data.success && (
-          <div className='text-center text-red-600 bg-red-50 border border-red-200 rounded-md p-3 text-sm'>
-            {data.message}
+          <div className='text-center text-red-600 bg-red-50 border-2 border-red-200 rounded-xl p-4 text-sm font-medium shadow-sm'>
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              {data.message}
+            </div>
           </div>
         )}
 
-        <div className='text-sm text-center text-gray-600'>
+        <div className='text-sm text-center text-gray-600 pt-4'>
           Chưa có tài khoản?{' '}
           <Link 
             target='_self' 
-            className='text-blue-600 hover:text-blue-800 font-medium' 
+            className='text-blue-600 hover:text-blue-800 font-semibold underline decoration-2 underline-offset-2 hover:decoration-blue-800 transition-all duration-200' 
             href={`/sign-up?callbackUrl=${callbackUrl}`}
           >
             Đăng ký ngay
