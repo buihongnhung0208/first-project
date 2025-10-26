@@ -120,23 +120,6 @@ export const sampleData = {
       banner: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=1200"
     },
     {
-      name: "Dyson V15 Detect Vacuum",
-      slug: "dyson-v15-detect",
-      category: "Home & Garden",
-      images: [
-        "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500",
-        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500"
-      ],
-      brand: "Dyson",
-      description: "Cordless vacuum with laser dust detection and powerful suction for deep cleaning.",
-      stock: 30,
-      price: 749.99,
-      rating: 4.8,
-      numReviews: 650,
-      isFeatured: false,
-      banner: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1200"
-    },
-    {
       name: "KitchenAid Stand Mixer",
       slug: "kitchenaid-stand-mixer",
       category: "Home & Garden",
