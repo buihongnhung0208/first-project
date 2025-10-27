@@ -13,6 +13,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Settings } from "lucide-react";
+import Link from "next/link";
+
 
 interface User {
   id: string;
@@ -116,6 +118,11 @@ export default function UserProfile({ showDetails = true }: { showDetails?: bool
           <User className="mr-2 h-4 w-4" />
           <span>Profile</span>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link className='w-full' href='/user/orders'>
+            Order History
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           <Settings className="mr-2 h-4 w-4" />
           <span>Settings</span>
@@ -126,6 +133,7 @@ export default function UserProfile({ showDetails = true }: { showDetails?: bool
           <span>{isLoggingOut ? "Logging out..." : "Log out"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
+    
     </DropdownMenu>
   );
 }
