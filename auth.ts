@@ -17,6 +17,7 @@ export const config = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
   providers: [
     CredentialsProvider({
       credentials: {
@@ -105,6 +106,9 @@ export const config = {
               });
             }
           }
+        }
+        if (session?.user.name && trigger === 'update') {
+          token.name = session.user.name;
         }
       }
       return token;
