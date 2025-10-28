@@ -1,22 +1,25 @@
+import { auth } from '@/auth';
 import { APP_NAME } from '@/lib/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import Menu from '@/components/shared/header/menu';
 import MainNav from './main-nav';
+import { User } from '@/lib/generated/prisma';
 
-export default function UserLayout({
+
+export default async function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
     <>
       <div className='flex flex-col'>
         <div className='border-b container mx-auto'>
           <div className='flex h-16 items-center px-4'>
             <Link href='/' className='w-22'>
-            <MainNav className='mx-6' />
-
               <Image
                 src='/images/logo.svg'
                 width={48}
@@ -24,9 +27,9 @@ export default function UserLayout({
                 alt={`${APP_NAME} logo`}
               />
             </Link>
-            {/* Main Nav Here */}
+            <MainNav className='mx-6' />
             <div className='ml-auto flex items-center space-x-4'>
-              <Menu user={null}/>
+              <Menu user={session?.user as User | null} />
             </div>
           </div>
         </div>
