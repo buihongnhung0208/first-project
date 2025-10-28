@@ -11,7 +11,6 @@ export function ClientProviders({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
       storageKey="theme"
-      suppressHydrationWarning
     >
       {children}
       <Toaster />
