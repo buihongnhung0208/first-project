@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { SessionProvider } from 'next-auth/react';
+import SessionWrapper  from '@/components/sessionWrapper';
 import { auth } from '@/auth';
 
 export const metadata: Metadata = {
@@ -9,12 +9,16 @@ export const metadata: Metadata = {
 
 export default async function ProfilePage() {
   const session = await auth();
+  if (!session?.user) {
+    redirect('/sign-in');
+  }
+  
   return (
-    <SessionProvider session={session}>
+    <SessionWrapper session={session}>
       <div className='max-w-md  mx-auto space-y-4'>
         <h2 className='h2-bold'>Profile</h2>
         Test User: {session?.user?.name}
       </div>
-    </SessionProvider>
+    </SessionWrapper>
   );
 }
