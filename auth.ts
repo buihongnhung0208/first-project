@@ -3,7 +3,6 @@ import type { NextAuthConfig } from 'next-auth';
 import NextAuth from 'next-auth';
 import { cookies } from 'next/headers';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
 import { prisma } from '@/db/prisma';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
@@ -17,6 +16,7 @@ export const config = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+
   providers: [
     CredentialsProvider({
       credentials: {
@@ -105,6 +105,9 @@ export const config = {
               });
             }
           }
+        }
+        if (session?.user.name && trigger === 'update') {
+          token.name = session.user.name;
         }
       }
       return token;

@@ -12,7 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings, History, UserCog } from "lucide-react";
+import Link from "next/link";
+
 
 interface User {
   id: string;
@@ -49,13 +51,13 @@ export default function UserProfile({ showDetails = true }: { showDetails?: bool
   const handleSignOut = async () => {
     try {
       setIsLoggingOut(true);
-      
+
       // Clear user state immediately for better UX
       setUser(null);
-      
+
       // Call signOut action
       await signOutUser();
-      
+
       // Force refresh to clear all session data
       window.location.href = "/";
     } catch (error) {
@@ -113,19 +115,38 @@ export default function UserProfile({ showDetails = true }: { showDetails?: bool
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+          <Link className='w-full flex items-center' href='/user/profile'>
+            <User className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link className='w-full flex items-center' href='/user/orders'>
+            <History className=" h-4 w-4" />
+            <span>Order History</span>
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
+          <Settings className=" h-4 w-4" />
           <span>Settings</span>
         </DropdownMenuItem>
+        {
+          user.role === 'ADMIN' && (
+            <DropdownMenuItem>
+              <Link className='w-full flex items-center' href='/admin/overview'>
+                <UserCog className="mr-2 h-4 w-4" />
+                <span>Admin</span>
+              </Link>
+            </DropdownMenuItem>
+          )
+        }
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} disabled={isLoggingOut}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>{isLoggingOut ? "Logging out..." : "Log out"}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
+
     </DropdownMenu>
   );
 }
