@@ -10,3 +10,4 @@
 
 /lib/generated/prisma
 .next
+.env
