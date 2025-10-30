@@ -12,6 +12,8 @@ import { CartItem, PaymentResult } from '@/types';
 import { convertToPlainObject } from '../utils';
 import { paypal } from '../paypal';
 import { PAGE_SIZE } from '../constants';
+import { Prisma } from '@/lib/generated/prisma';
+
 
 
 export async function getOrderById(orderId: string) {
@@ -386,4 +388,40 @@ export async function deliverOrder(orderId: string) {
   } catch (err) {
     return { success: false, message: formatError(err) };
   }
+}
+
+export async function getAllUsers({
+  limit = PAGE_SIZE,
+  page,
+  query,
+}: {
+  limit?: number;
+  page: number;
+  query: string;
+}) {
+  const queryFilter: Prisma.UserWhereInput =
+    query && query !== 'all'
+      ? {
+          name: {
+            contains: query,
+            mode: 'insensitive',
+          } as Prisma.StringFilter,
+        }
+      : {};
+
+  const data = await prisma.user.findMany({
+    where: {
+      ...queryFilter,
+    },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+
+  const dataCount = await prisma.user.count();
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit),
+  };
 }
