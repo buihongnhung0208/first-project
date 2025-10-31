@@ -6,6 +6,8 @@ import { prisma } from '@/db/prisma';
 import { revalidatePath } from 'next/cache';
 import { insertProductSchema, updateProductSchema } from '../validators';
 import { z } from 'zod';
+import { Prisma } from '@/lib/generated/prisma';
+
 
 
 // Get the latest products
@@ -25,18 +27,69 @@ export async function getAllProducts({
   limit = PAGE_SIZE,
   page,
   category,
+  price,
+  rating,
+  sort,
 }: {
   query: string;
+  category: string;
   limit?: number;
   page: number;
-  category?: string;
+  price?: string;
+  rating?: string;
+  sort?: string;
 }) {
+  // Filter by query
+  const queryFilter: Prisma.ProductWhereInput =
+    query && query !== 'all'
+      ? {
+          name: {
+            contains: query,
+            mode: 'insensitive',
+          } as Prisma.StringFilter,
+        }
+      : {};
+
+  // Filter by category
+  const categoryFilter = category && category !== 'all' ? { category } : {};
+
+  // Filter by price
+  const priceFilter: Prisma.ProductWhereInput =
+    price && price !== 'all'
+      ? {
+          price: {
+            gte: Number(price.split('-')[0]),
+            lte: Number(price.split('-')[1]),
+          },
+        }
+      : {};
+
+  // Filter by rating
+  const ratingFilter: Prisma.ProductWhereInput =
+    rating && rating !== 'all' ? { rating: { gte: Number(rating) } } : {};
+
+  const where: Prisma.ProductWhereInput = {
+    ...queryFilter,
+    ...categoryFilter,
+    ...priceFilter,
+    ...ratingFilter,
+  };
+
   const data = await prisma.product.findMany({
+    where,
+    orderBy:
+      sort === 'lowest'
+        ? { price: 'asc' }
+        : sort === 'highest'
+        ? { price: 'desc' }
+        : sort === 'rating'
+        ? { rating: 'desc' }
+        : { createdAt: 'desc' },
     skip: (page - 1) * limit,
     take: limit,
   });
 
-  const dataCount = await prisma.product.count();
+  const dataCount = await prisma.product.count({ where });
 
   return {
     data,
@@ -109,6 +162,25 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 export async function getProductById(productId: string) {
   const data = await prisma.product.findFirst({
     where: { id: productId },
+  });
+
+  return convertToPlainObject(data);
+}
+
+export async function getAllCategories() {
+  const data = await prisma.product.groupBy({
+    by: ['category'],
+    _count: true,
+  });
+
+  return data;
+}
+
+export async function getFeaturedProducts() {
+  const data = await prisma.product.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: 'desc' },
+    take: 4,
   });
 
   return convertToPlainObject(data);

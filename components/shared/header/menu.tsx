@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ModeToggle from './mode-toggle';
 import UserProfile from '../user-profile';
 import CartCount from './cart-count';
+import Search from './search';
 
 interface User {
   id: string;
@@ -48,6 +49,9 @@ const Menu = ({ user }: { user: User | null }) => {
             </SheetTrigger>
             <SheetContent className='flex flex-col items-start'>
               <SheetTitle>Menu</SheetTitle>
+              <div className='mt-10'>
+                <Search />
+              </div>
               <ModeToggle />
               <Button asChild variant='ghost'>
                 <Link href='/cart' className='relative'>
