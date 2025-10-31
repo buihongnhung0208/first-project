@@ -1,11 +1,24 @@
 import { Button } from '@/components/ui/button';
 import ProductList from '@/components/shared/product/product-list';
 import { prisma } from '@/db/prisma';
+import {
+  getFeaturedProducts,
+  getLatestProducts,
+} from '@/lib/actions/product.actions';
+import {ProductCarousel} from '@/components/shared/product/product-carousel';
+import ViewAllProductsButton from '@/components/view-all-products-button';
+
 
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const HomePage = async () => {
   await delay(2000);
+  const featuredProductsRaw = await getFeaturedProducts();
+  const featuredProducts = featuredProductsRaw.map(p => ({
+    ...p,
+    rating: Number(p.rating),
+    price: Number(p.price),
+  }));
   
   // Lấy sản phẩm từ database
   const products = await prisma.product.findMany({
@@ -14,9 +27,12 @@ const HomePage = async () => {
   });
 
   return (
-    <div className='space-y-8'>
-      <ProductList title='Sản phẩm nổi bật' data={products} limit={8} />
-    </div>
+    <div>
+    {featuredProducts.length > 0 && <ProductCarousel data={featuredProducts} />}
+
+    <ProductList title='Newest Arrivals' data={products} />
+    <ViewAllProductsButton />
+  </div>
   );
 };
 

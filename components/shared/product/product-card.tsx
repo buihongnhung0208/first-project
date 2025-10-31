@@ -3,21 +3,12 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import ProductPrice from '@/components/shared/product/product-price';
 import { Star } from 'lucide-react';
+import Rating from './rating';
+
 
 const ProductCard = ({ product }: { product: any }) => {
   const renderStars = (rating: number) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <Star
-          key={i}
-          className={`h-3 w-3 ${
-            i <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
-          }`}
-        />
-      );
-    }
-    return stars;
+    return <Rating value={Number(rating)} />
   };
 
   return (
