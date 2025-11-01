@@ -14,22 +14,37 @@ export const insertProductSchema = z.object({
 
 // Schema for signing in a user
 export const signInFormSchema = z.object({
-  email: z.string().email('Invalid email address').min(3, 'Email must be at least 3 characters'),
-  password: z.string().min(3, 'Password must be at least 3 characters'),
+  email: z
+    .string()
+    .min(1, 'Email là bắt buộc')
+    .email('Email không hợp lệ'),
+  password: z
+    .string()
+    .min(1, 'Mật khẩu là bắt buộc')
+    .min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
 });
 
 // Schema for signing up a user
 export const signUpFormSchema = z
   .object({
-    name: z.string().min(3, 'Name must be at least 3 characters'),
-    email: z.string().min(3, 'Email must be at least 3 characters'),
-    password: z.string().min(3, 'Password must be at least 3 characters'),
-    confirmPassword: z
+    name: z
       .string()
-      .min(3, 'Confirm password must be at least 3 characters'),
+      .min(1, 'Họ tên là bắt buộc')
+      .min(2, 'Họ tên phải có ít nhất 2 ký tự')
+      .max(50, 'Họ tên không được vượt quá 50 ký tự')
+      .regex(/^[a-zA-ZÀ-ỹ\s]+$/, 'Họ tên chỉ được chứa chữ cái'),
+    email: z
+      .string()
+      .min(1, 'Email là bắt buộc')
+      .email('Email không hợp lệ'),
+    password: z
+      .string()
+      .min(1, 'Mật khẩu là bắt buộc')
+      .min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
+    confirmPassword: z.string().min(1, 'Xác nhận mật khẩu là bắt buộc'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: 'Mật khẩu không khớp',
     path: ['confirmPassword'],
   });
   

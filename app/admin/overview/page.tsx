@@ -15,6 +15,7 @@ import {
 import Link from 'next/link';
 import { requireAdmin } from '@/lib/auth-guard';
 import Charts from './charts';
+import { Button } from '@/components/ui/button';
 
 
 export const metadata: Metadata = {
@@ -99,24 +100,43 @@ const AdminOverviewPage = async () => {
                                           <TableHeader>
                                                 <TableRow>
                                                       <TableHead>BUYER</TableHead>
+                                                      <TableHead>EMAIL</TableHead>
                                                       <TableHead>DATE</TableHead>
                                                       <TableHead>TOTAL</TableHead>
+                                                      <TableHead>STATUS</TableHead>
                                                       <TableHead>ACTIONS</TableHead>
                                                 </TableRow>
                                           </TableHeader>
                                           <TableBody>
                                                 {summary.latestOrders.map((order) => (
                                                       <TableRow key={order.id}>
-                                                            <TableCell>
-                                                                  {order.user?.name ? order.user.name : 'Deleted user'}
+                                                            <TableCell className="font-medium">
+                                                                  {order.user?.name || 'Deleted user'}
+                                                            </TableCell>
+                                                            <TableCell className="text-sm text-gray-500">
+                                                                  {order.user?.email || '-'}
                                                             </TableCell>
                                                             <TableCell>
-                                                                  {formatDateTime(order.createdAt).dateOnly}
+                                                                  {formatDateTime(order.createdAt).dateTime}
                                                             </TableCell>
-                                                            <TableCell>{formatCurrency(order.totalPrice.toString())}</TableCell>
+                                                            <TableCell className="font-semibold">
+                                                                  {formatCurrency(order.totalPrice.toString())}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                  <div className="flex flex-col gap-1">
+                                                                    <span className={order.isPaid ? 'text-green-600' : 'text-red-600'}>
+                                                                      {order.isPaid ? '✓ Paid' : '✗ Not Paid'}
+                                                                    </span>
+                                                                    <span className={order.isDelivered ? 'text-green-600' : 'text-gray-500'}>
+                                                                      {order.isDelivered ? '✓ Delivered' : '⏳ Pending'}
+                                                                    </span>
+                                                                  </div>
+                                                            </TableCell>
                                                             <TableCell>
                                                                   <Link href={`/order/${order.id}`}>
-                                                                        <span className='px-2'>Details</span>
+                                                                        <Button variant='outline' size='sm'>
+                                                                              View
+                                                                        </Button>
                                                                   </Link>
                                                             </TableCell>
                                                       </TableRow>
