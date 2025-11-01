@@ -34,10 +34,10 @@ const SignIn = async (
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-4 py-8'>
-      <div className='w-full max-w-lg'>
+    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 px-4 py-8'>
+      <div className='w-full max-w-4xl mx-auto pt-12'>
         <Card className='shadow-2xl border-0 bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden'>
-          <CardHeader className='space-y-6 text-center pb-8 pt-8'>
+          <CardHeader className='space-y-6 text-center pb-6 pt-8'>
             <Link href='/' className='flex justify-center group'>
               <Image
                 priority={true}
@@ -57,7 +57,7 @@ const SignIn = async (
               </CardDescription>
             </div>
           </CardHeader>
-          <CardContent className='px-10 pb-10'>
+          <CardContent className='px-12 md:px-16 pb-12'>
             <CredentialsSignInForm />
           </CardContent>
         </Card>

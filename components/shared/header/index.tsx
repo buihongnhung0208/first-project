@@ -8,7 +8,7 @@ import Search from './search';
 
 const Header = () => {
   return (
-    <header className="w-full  border-b border-gray-200 shadow-sm backdrop-blur-sm sticky top-0 z-50">
+    <header className="w-full border-b border-gray-200 shadow-sm backdrop-blur-sm bg-white/95 sticky top-0 z-[9999]">
       <div className="wrapper flex-between py-4">
         <div className="flex-start">
           <CategoriesDrawer />

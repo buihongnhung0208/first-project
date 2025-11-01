@@ -8,11 +8,12 @@ import { getMyCart } from './cart.actions';
 import { getUserById } from './user.actions';
 import { insertOrderSchema } from '../validators';
 import { prisma } from '@/db/prisma';
-import { CartItem, PaymentResult } from '@/types';
+import { CartItem, PaymentResult, ShippingAddress, Order } from '@/types';
 import { convertToPlainObject } from '../utils';
 import { paypal } from '../paypal';
 import { PAGE_SIZE } from '../constants';
 import { Prisma } from '@/lib/generated/prisma';
+import { sendPurchaseReceipt } from '@/email';
 
 
 
@@ -152,16 +153,21 @@ export async function approvePayPalOrder(
         id: orderId,
       },
     })
-    if (!order) throw new Error('Order not found')
+    
+    if (!order) {
+      throw new Error('Order not found');
+    }
 
     // Check if the order is already paid
-    const captureData = await paypal.capturePayment(data.orderID)
+    const captureData = await paypal.capturePayment(data.orderID);
+
     if (
       !captureData ||
       captureData.id !== (order.paymentResult as PaymentResult)?.id ||
       captureData.status !== 'COMPLETED'
-    )
-      throw new Error('Error in paypal payment')
+    ) {
+      throw new Error('Error in paypal payment');
+    }
 
     // Update order to paid
     await updateOrderToPaid({
@@ -175,7 +181,7 @@ export async function approvePayPalOrder(
       },
     });
 
-    revalidatePath(`/order/${orderId}`)
+    revalidatePath(`/order/${orderId}`);
 
     return {
       success: true,
@@ -187,7 +193,7 @@ export async function approvePayPalOrder(
 }
 
 // Update Order to Paid in Database
-async function updateOrderToPaid({
+export async function updateOrderToPaid({
   orderId,
   paymentResult,
 }: {
@@ -204,9 +210,13 @@ async function updateOrderToPaid({
     },
   });
 
-  if (!order) throw new Error('Order not found');
+  if (!order) {
+    throw new Error('Order not found');
+  }
 
-  if (order.isPaid) throw new Error('Order is already paid');
+  if (order.isPaid) {
+    throw new Error('Order is already paid');
+  }
 
   // Transaction to update the order and update the product quantities
   await prisma.$transaction(async (tx) => {
@@ -242,6 +252,30 @@ async function updateOrderToPaid({
 
   if (!updatedOrder) {
     throw new Error('Order not found');
+  }
+
+  // Send the purchase receipt email with the updated order
+  try {
+    const emailOrder: Order = {
+      ...updatedOrder,
+      itemsPrice: updatedOrder.itemsPrice.toString(),
+      shippingPrice: updatedOrder.shippingPrice.toString(),
+      taxPrice: updatedOrder.taxPrice.toString(),
+      totalPrice: updatedOrder.totalPrice.toString(),
+      shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+      paymentResult: updatedOrder.paymentResult as PaymentResult | undefined, // COD có thể undefined
+      orderItems: updatedOrder.orderItems.map((item) => ({
+        ...item,
+        price: item.price.toString(),
+      })),
+    };
+    
+    await sendPurchaseReceipt({
+      order: emailOrder,
+    });
+  } catch (error) {
+    // Email failure shouldn't block order update
+    // Silently fail - order is already marked as paid
   }
 }
 export async function getMyOrders({
@@ -293,11 +327,16 @@ export async function getOrderSummary() {
     totalSales: Number(entry.totalSales), // Convert Decimal to number
   }));
 
-  // Get latest sales
+  // Get latest sales with user information
   const latestOrders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      user: { select: { name: true } },
+      user: { 
+        select: { 
+          name: true,
+          email: true,
+        } 
+      },
     },
     take: 6,
   });

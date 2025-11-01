@@ -29,15 +29,18 @@ import {
   updateOrderToPaidByCOD,
 } from '@/lib/actions/order.actions';
 import { useToast } from '@/hooks/use-toast';
+import StripePayment from './stripe-payment';
 
 const OrderDetailsTable = ({
   order,
   paypalClientId,
   isAdmin,
+  stripeClientSecret,
 }: {
-  order: Order;
+  order: Omit<Order, 'paymentResult'>;
   paypalClientId: string;
   isAdmin: boolean;
+  stripeClientSecret: string | null;
 }) => {
   const {
     shippingAddress,
@@ -244,6 +247,15 @@ const OrderDetailsTable = ({
                 />
               </PayPalScriptProvider>
             </div>
+          )}
+
+          {/* Stripe Payment */}
+          {!isPaid && paymentMethod === 'Stripe' && stripeClientSecret && (
+            <StripePayment
+              priceInCents={Number(totalPrice) * 100}
+              orderId={order.id}
+              clientSecret={stripeClientSecret}
+            />
           )}
           {/* Admin control buttons below */}
           {/* Cash On Delivery */}

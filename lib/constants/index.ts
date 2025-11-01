@@ -59,3 +59,8 @@ export const reviewFormDefaultValues = {
   userId: '',
   rating: 0,
 };
+
+// For development: Use Resend's test email
+// For production: Verify your domain and use your own email
+export const SENDER_EMAIL =
+  process.env.SENDER_EMAIL || 'onboarding@resend.dev';
